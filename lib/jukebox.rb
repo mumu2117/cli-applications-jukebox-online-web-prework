@@ -1,53 +1,61 @@
-def help
-   help = 
-   "I accept the following commands:
-   - help : displays this help message
-   - list : displays a list of songs you can play
-   - play : lets you choose a song to play
-   - exit : exits this program"
-   puts help
- end
+def help()
+  puts "/I accept the following commands:/\n"
+  puts "/- help : displays this help message/\n"
+  puts "/- list : displays a list of songs you can play/\n"
+  puts "/- play : lets you choose a song to play/\n"
+  puts "/- exit : exits this program/"
+end
 
- def list(songs)
-   songs.each_with_index do |song_name, i|
-     puts "#{i+1}. #{song_name}"
-   end
- end
-
- def play(songs)
-   puts "Please enter a song name or number:"
-   song_to_play = gets.chomp
-   if songs.include?(song_to_play)
-     puts "Playing #{song_to_play}"
-   else if (1...9).to_a.include?(song_to_play.to_i)
-     puts "Playing #{songs[song_to_play.to_i - 1]}"
-   else
-     puts "Invalid input, please try again"
-   end
- end
- end
-
- def exit_jukebox
-   puts "Goodbye"
- end
-
-def run(songs)
-    input = ""
-    while input
-    puts "Please enter a command:"
-    input = gets.downcase.chomp
-    case input
-    when "list"
-      list(songs)
-    when "help"
-      help
-    when "play"
-      play(songs)
-    when "exit"
-    exit_jukebox
-    break
+def play(songs)
+  puts "/Please enter a song name or number:/"
+  user_input = gets.strip    
+  found = false
+  input = Integer(user_input) rescue false
+  if input
+    if songs[user_input.to_i-1]
+      play_song = songs[user_input.to_i-1]
+      found = true
+    end
   else
-    help
+    if songs.include?(user_input)
+      play_song = user_input
+      found = true
+    end
+  end
+  if found
+    puts "/Playing #{play_song}/"
+  else
+    puts "/Invalid input, please try again/"
   end
 end
+
+def list(songs)
+  array = []
+  songs.each_with_index do |song, index|
+    puts "/#{index+1}. #{song}/"
+  end
 end
+
+def exit_jukebox()
+  puts "/Goodbye/"
+end
+
+def run(songs)
+  loop do
+    puts "/Please enter a command:/"
+    user_input = gets.strip
+    if user_input == "play"
+      play(songs)
+    elsif user_input == "help"
+      help()
+    elsif user_input == "list"
+      list(songs)
+    elsif user_input == "exit"
+      exit_jukebox()
+    else
+      puts "/Invalid input/"
+    end
+
+    break if user_input == "exit"
+  end
+end 
